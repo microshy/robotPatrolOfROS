@@ -1,0 +1,3 @@
+float64 pose.pose.position.x
+float64 pose.pose.position.y
+float64 pose.pose.orientation

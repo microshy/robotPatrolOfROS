@@ -1,0 +1,5 @@
+geometry_msgs/PoseWithCovariance poseA
+geometry_msgs/PoseWithCovariance poseB
+geometry_msgs/PoseWithCovariance poseC
+---
+float32 theta

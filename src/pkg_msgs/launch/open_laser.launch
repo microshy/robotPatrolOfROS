@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="laser_node" name="laser_node" type="laser_node"/>
+</launch>
