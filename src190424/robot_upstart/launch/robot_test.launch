@@ -1,0 +1,25 @@
+<launch>
+	<node pkg="communication" type="udp_node" name="udp_node" output="screen" respawn="true" >
+	</node>
+
+	<node pkg="communication" type="move_node" name="move_node"  >
+	</node>
+	
+	<node pkg="communication" type="moveRound_node" name="moveRound_node"  >
+	</node>  
+
+        <node pkg="communication" type="plc_node" name="plc_node"  >
+	</node>
+	
+	<node pkg="processor" type="processor" name="processor" output="screen"  >
+	</node>
+
+        <node pkg="stateandalarm" type="stateandalarm" name="stateandalarm"  >
+        </node>
+
+        <node pkg="move" type="move" name="move" >
+        </node>
+        
+	<node pkg="pkg_back" type="battery_node" name="battery_node" >
+        </node>
+</launch>

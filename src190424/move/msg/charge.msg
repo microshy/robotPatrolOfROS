@@ -1,0 +1,2 @@
+bool chargeFlag
+bool isInRoom

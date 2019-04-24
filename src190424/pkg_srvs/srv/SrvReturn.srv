@@ -1,0 +1,4 @@
+bool clear
+---
+string location
+string speed
