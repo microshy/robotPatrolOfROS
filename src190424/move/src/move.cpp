@@ -11,7 +11,7 @@
 #include "pkg_srvs/SrvGetLine.h"                      //两点求直线服务
 #include "pkg_srvs/SrvGetYawBias.h"                   //求偏行角服务
 #include "pkg_msgs/MsgPointInfo.h"                    //关键点发送给自主返航模块
-#include "pkg_msgs/MsgOdometrySensor.h" 
+#include "pkg_msgs/MsgOdometrySensor.h"
 #include "processor/parkingOrder.h"                   //发送给出入库充电模块
 #include "pkg_srvs/SrvMode.h"
 #include "processor/isTurn.h"                        //是否旋转
@@ -27,9 +27,9 @@ using namespace std;
 #define V 400.0      //定义机器人运行速度 mm/s
 #define W 150.0      //定义机器人运行角速度 0.001rad/s
 #define T 0.02       //定义每次发送速度指令的时间周期
-#define movecount 1   
+#define movecount 1
 #define a 0.5
-#define b 0.5 
+#define b 0.5
 #define Kx 1
 #define Ky 5
 #define K 1
@@ -705,6 +705,7 @@ public:
         double wheeldistance = 0.535;//unit:m
         double wheelradius = 150;//unit:mm
 
+        //以运动方向为坐标系的分解
         Xe=(xd-x0)*cos(th0)+(yd-y0)*sin(th0);
         Ye=(-1)*(xd-x0)*sin(th0)+(yd-y0)*cos(th0);
         THe=getTHe(temp_dtheta,th0);
@@ -988,7 +989,7 @@ public:
         }
     }
 
-	
+
 	void EnableMotor(char state)
 	{
 		communication::sendCmd srvm;//发送给运控板
@@ -997,8 +998,8 @@ public:
 		srvm.request.data=state;
 		sendCmd(clientm, srvm);
 	}
-	
-	
+
+
     void spinfun(double targetth) //控制机器人旋转
     {
         communication::sendCmd automov;
@@ -1024,8 +1025,8 @@ public:
         sendCmd(clientm, automov);
         ros::Duration(1).sleep();
 
-		
-		
+
+
         double thetatoturn=0;
         thetatoturn=getYawBias(targetth);//偏航角
         ROS_INFO("Move:spinfun, YawBias:%.3f",thetatoturn);
@@ -1042,7 +1043,7 @@ public:
         char turn[23]={0x41,0x00,0x42,0x00,0x43,0xFF,0xFF,0xEE,0x6C,0x00,0x00,0x11,0x94,
                        0x00,0x00,0x11,0x94,0xFF,0xFF,0xEE,0x6C,0x44,0x00}; //旋转45度
 
-					   
+
         //指出轮子调整目标，45度
         to45angle=true;
         to0angle=false;
@@ -1074,11 +1075,11 @@ public:
 		char state=0x0E;
 		EnableMotor(state);
 		ROS_INFO("Move:Close motor");
-	
+
 		//等待电关闭
 		int retry_num = 0;
 		while(motorState!=0x0E)
-		{   
+		{
 			ros::spinOnce();
 			ros::Duration(0.1).sleep();
 			retry_num++;
@@ -1125,10 +1126,10 @@ public:
             //判断旋转翻方向
             if(thetatoturn>0){wfirst=(short int)((-1)*W*spinslowrate);}
             if(thetatoturn<0){wfirst=(short int)(W*spinslowrate);}
-            
+
             if(thetatoturn>2.61) wfirst*=-1;
-            
-            
+
+
             //当某个直行电机电流值大于8000mA时，机器人适应电流方向，反向旋转半圈，
 			int safeCurrent=8000;
             if((abs(lfzxcurrent)>safeCurrent)||(abs(rfzxcurrent)>safeCurrent)||(abs(lbzxcurrent)>safeCurrent)||(abs(rbzxcurrent)>safeCurrent))
@@ -1158,7 +1159,7 @@ public:
                 ROS_INFO("Move:ZXMotorCurrent is greater than safe current, close motor");
                 int retry_num = 0;
 				while(motorState!=0x00)
-				{   
+				{
 					ros::spinOnce();
 					ros::Duration(0.1).sleep();
 					retry_num++;
@@ -1176,7 +1177,7 @@ public:
 				EnableMotor(state);
 				retry_num = 0;
 				while(motorState!=0x0E)
-				{   
+				{
 					ros::spinOnce();
 					ros::Duration(0.1).sleep();
 					retry_num++;
@@ -1201,7 +1202,7 @@ public:
                 if(thetatoturn>0){wfirst=(short int)((-1)*W*spinslowrate);}
                 if(thetatoturn<0){wfirst=(short int)(W*spinslowrate);}
                 if(thetatoturn>2.61) wfirst*=-1;
-                
+
             }
             ROS_INFO("Move:spinfun speed :%d",wfirst);
             ctrmov1[0]=0x41;//运动控制处理逻辑指令
@@ -1239,8 +1240,8 @@ public:
         automov.request.data="";
         automov.request.data+=strtf(automov.request.lenth,ctrmov2);
         sendCmd(clientm, automov);
-	
-		
+
+
         //指出轮子调整目标，0度
         to45angle=false;
         to0angle=true;
@@ -1270,7 +1271,7 @@ public:
 		//等待电机开启
 		retry_num=0;
 		while(motorState!=0x0F)
-		{   
+		{
 			ros::spinOnce();
 			ros::Duration(0.1).sleep();
 			retry_num++;
@@ -1281,14 +1282,14 @@ public:
 				ROS_INFO("Move:open motor again");
 			}
 		}
-		ROS_INFO("Move: motor opened");  
+		ROS_INFO("Move: motor opened");
         //printf("turn success,flag: %d\n",roundFlag);
         ROS_INFO("Move:spinfun:spin turn success, roundFlag is %d",roundFlag);
         msg.turnFlag=false;
         pub_turn.publish(msg);
         pub_turn.publish(msg);
-        
-        
+
+
     }
 
 private:

@@ -758,6 +758,7 @@ public:
 
     void chargeBack1()
     {
+
         //运控板正常
         state[27]=0x00;
         state[29]=0x00;
@@ -804,7 +805,7 @@ public:
 
     void statecallback4(const communication::state::ConstPtr& msg4)//获取运动控制板信息；
     {
-        
+
         comstate[1]=0x00;  //工控机与运控板通讯 超时状态
         comstate[3]=0x00;  //工控机与运控板通讯 错误状态
         if(!state[83]){
